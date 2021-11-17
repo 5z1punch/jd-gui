@@ -86,6 +86,7 @@ public class MainController implements API {
             mainView = new MainView(
                 configuration, this, history,
                 e -> onOpen(),
+                e -> onOpenDir(),
                 e -> onClose(),
                 e -> onSaveSource(),
                 e -> onSaveAllSources(),
@@ -200,6 +201,17 @@ public class MainController implements API {
             openFile(chooser.getSelectedFile());
         }
 	}
+
+    protected void onOpenDir() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setCurrentDirectory(configuration.getRecentLoadDirectory());
+
+        if (chooser.showOpenDialog(mainView.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+            configuration.setRecentLoadDirectory(chooser.getCurrentDirectory());
+            openFile(chooser.getSelectedFile());
+        }
+    }
 
     protected void onClose() {
         mainView.closeCurrentTab();
@@ -441,9 +453,15 @@ public class MainController implements API {
         for (File file : files) {
             // Check input file
             if (file.exists()) {
-                FileLoader loader = getFileLoader(file);
-                if ((loader != null) && !loader.accept(this, file)) {
-                    errors.add("Invalid input fileloader: '" + file.getAbsolutePath() + "'");
+                FileLoader loader;
+                if(file.isFile()) {
+                    loader = getFileLoader(file);
+                    if ((loader != null) && !loader.accept(this, file)) {
+                        errors.add("Invalid input fileloader: '" + file.getAbsolutePath() + "'");
+                    }
+                }
+                else{
+                    // Dir loader
                 }
             } else {
                 errors.add("File not found: '" + file.getAbsolutePath() + "'");

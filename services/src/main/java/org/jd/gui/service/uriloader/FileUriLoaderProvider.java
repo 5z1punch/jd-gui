@@ -8,6 +8,7 @@
 package org.jd.gui.service.uriloader;
 
 import org.jd.gui.api.API;
+import org.jd.gui.service.fileloader.DirLoaderProvider;
 import org.jd.gui.spi.FileLoader;
 import org.jd.gui.spi.UriLoader;
 
@@ -23,7 +24,13 @@ public class FileUriLoaderProvider implements UriLoader {
 
     public boolean load(API api, URI uri) {
         File file = new File(uri.getPath());
-        FileLoader fileLoader = api.getFileLoader(file);
+        FileLoader fileLoader;
+        if(file.isFile()) {
+            fileLoader = api.getFileLoader(file);
+        }
+        else{
+            fileLoader = new DirLoaderProvider();
+        }
 
         return (fileLoader != null) && fileLoader.load(api, file);
     }

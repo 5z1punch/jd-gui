@@ -27,8 +27,10 @@ public class App {
 
     public static void main(String[] args) {
 		if (checkHelpFlag(args)) {
-			JOptionPane.showMessageDialog(null, "Usage: jd-gui [option] [input-file] ...\n\nOption:\n -h Show this help message and exit", Constants.APP_NAME, JOptionPane.INFORMATION_MESSAGE);
-		} else {
+            String helpMessage = "Usage: jd-gui [option] [input-file] ...\n\nOption:\n -h Show this help message and exit";
+			JOptionPane.showMessageDialog(null, helpMessage, Constants.APP_NAME, JOptionPane.INFORMATION_MESSAGE);
+		    System.out.println(helpMessage);
+        } else {
             // Load preferences
             ConfigurationPersister persister = ConfigurationPersisterService.getInstance().get();
             Configuration configuration = persister.load();

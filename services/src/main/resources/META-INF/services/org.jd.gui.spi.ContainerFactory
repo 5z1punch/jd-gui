@@ -4,4 +4,5 @@ org.jd.gui.service.container.JavaModuleContainerFactoryProvider
 org.jd.gui.service.container.EarContainerFactoryProvider
 org.jd.gui.service.container.WarContainerFactoryProvider
 org.jd.gui.service.container.JarContainerFactoryProvider
+org.jd.gui.service.container.DirContainerFactoryProvider
 org.jd.gui.service.container.GenericContainerFactoryProvider

@@ -57,6 +57,7 @@ public class MainView<T extends JComponent & UriGettable> implements UriOpenable
     public MainView(
             Configuration configuration, API api, History history,
             ActionListener openActionListener,
+            ActionListener openDirActionListener,
             ActionListener closeActionListener,
             ActionListener saveActionListener,
             ActionListener saveAllSourcesActionListener,
@@ -173,6 +174,7 @@ public class MainView<T extends JComponent & UriGettable> implements UriOpenable
             // Actions //
             boolean browser = Desktop.isDesktopSupported() ? Desktop.getDesktop().isSupported(Desktop.Action.BROWSE) : false;
             Action openAction = newAction("Open File...", newImageIcon("/org/jd/gui/images/open.png"), true, "Open a file", openActionListener);
+            Action openDirAction = newAction("Open Directory...", newImageIcon("/org/jd/gui/images/open_dir.png"), true, "Open a directory", openDirActionListener);
             closeAction = newAction("Close", false, closeActionListener);
             Action saveAction = newAction("Save", newImageIcon("/org/jd/gui/images/save.png"), false, saveActionListener);
             Action saveAllSourcesAction = newAction("Save All Sources", newImageIcon("/org/jd/gui/images/save_all.png"), false, saveAllSourcesActionListener);
@@ -199,6 +201,7 @@ public class MainView<T extends JComponent & UriGettable> implements UriOpenable
             JMenu menu = new JMenu("File");
             menuBar.add(menu);
             menu.add(openAction).setAccelerator(KeyStroke.getKeyStroke('O', menuShortcutKeyMask));
+            menu.add(openDirAction).setAccelerator(KeyStroke.getKeyStroke('D', menuShortcutKeyMask));
             menu.addSeparator();
             menu.add(closeAction).setAccelerator(KeyStroke.getKeyStroke('W', menuShortcutKeyMask));
             menu.addSeparator();
@@ -252,6 +255,7 @@ public class MainView<T extends JComponent & UriGettable> implements UriOpenable
             toolBar.setFloatable(false);
             toolBar.setRollover(true);
             toolBar.add(new IconButton(openAction));
+            toolBar.add(new IconButton(openDirAction));
             toolBar.addSeparator();
             toolBar.add(new IconButton(openTypeAction));
             toolBar.add(new IconButton(searchAction));
