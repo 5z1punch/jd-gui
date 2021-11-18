@@ -20,4 +20,4 @@ save all sources 时如果在释放文件时出现异常导致 task 退出，则
 
 这里修了一个文件名不合法导致的退出。
 
-然后给整个task加了try cache。
+然后给整个task加了try catch。
