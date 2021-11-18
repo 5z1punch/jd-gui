@@ -7,10 +7,12 @@
 
 package org.jd.gui.model.container;
 
+import com.sun.nio.zipfs.ZipPath;
 import org.jd.gui.api.API;
 import org.jd.gui.api.model.Container;
 import org.jd.gui.spi.ContainerFactory;
 import org.jd.gui.util.exception.ExceptionUtil;
+import org.jd.gui.util.log.ServiceLogImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +20,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 public class GenericContainer implements Container {
     protected static final long TIMESTAMP = System.currentTimeMillis();
@@ -87,19 +86,27 @@ public class GenericContainer implements Container {
 
         public String getPath() {
             if (strPath == null) {
-                int nameCount = fsPath.getNameCount();
+                try {
+                    int nameCount = fsPath.getNameCount();
 
-                if (rootNameCount == nameCount) {
-                    strPath = "";
-                } else {
-                    strPath = fsPath.subpath(rootNameCount, nameCount).toString().replace(fsPath.getFileSystem().getSeparator(), "/");
+                    if (rootNameCount == nameCount) {
+                        strPath = "";
+                    } else {
+                        strPath = fsPath.subpath(rootNameCount, nameCount).toString().replace(fsPath.getFileSystem().getSeparator(), "/");
 
-                    int strPathLength = strPath.length();
+                        int strPathLength = strPath.length();
 
-                    if ((strPathLength > 0) && strPath.charAt(strPathLength-1) == '/') {
-                        // Cut last separator
-                        strPath = strPath.substring(0, strPathLength-1);
+                        if ((strPathLength > 0) && strPath.charAt(strPathLength - 1) == '/') {
+                            // Cut last separator
+                            strPath = strPath.substring(0, strPathLength - 1);
+                        }
                     }
+                }
+                catch (Exception e){
+                    if(ZipPath.class.isAssignableFrom(fsPath.getClass())){
+                        ServiceLogImpl.logger.error("Cant get a utf8 sub path in the zip file: "+fsPath.getFileSystem());
+                    }
+                    throw e;
                 }
             }
             return strPath;
@@ -138,7 +145,8 @@ public class GenericContainer implements Container {
                     } else {
                         children = loadChildrenFromFileEntry();
                     }
-                } catch (IOException e) {
+                } catch (Throwable e) {
+                    // 原本只捕获了io错误，但是zip结构异常同样会导致 provider 无法读取，所以这里直接捕获所有Throwable（zip异常会抛出ziperror，不是exception
                     assert ExceptionUtil.printStackTrace(e);
                 }
             }
