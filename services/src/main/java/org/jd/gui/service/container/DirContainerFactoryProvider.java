@@ -6,6 +6,7 @@ import org.jd.gui.model.container.DirContainer;
 import org.jd.gui.model.container.JarContainer;
 import org.jd.gui.spi.ContainerFactory;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class DirContainerFactoryProvider implements ContainerFactory {
@@ -16,7 +17,7 @@ public class DirContainerFactoryProvider implements ContainerFactory {
 
     @Override
     public boolean accept(API api, Path rootPath) {
-        return rootPath.toFile().isDirectory();
+        return rootPath.getFileName()!=null && Files.isDirectory(rootPath);
     }
 
     @Override

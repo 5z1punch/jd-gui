@@ -18,6 +18,7 @@ import org.jd.gui.spi.PanelFactory;
 import org.jd.gui.spi.SourceSaver;
 import org.jd.gui.spi.TreeNodeFactory;
 import org.jd.gui.util.exception.ExceptionUtil;
+import org.jd.gui.util.log.LogImpl;
 import org.jd.gui.view.component.panel.TreeTabbedPanel;
 
 import javax.swing.*;
@@ -105,6 +106,7 @@ public class ContainerPanelFactoryProvider implements PanelFactory {
 
         @Override
         public void save(API api, Controller controller, Listener listener, Path path) {
+            LogImpl.logger.debug("Save task executing...");
             try {
                 Path parentPath = path.getParent();
 
@@ -114,7 +116,7 @@ public class ContainerPanelFactoryProvider implements PanelFactory {
 
                 URI uri = path.toUri();
                 URI archiveUri = new URI("jar:" + uri.getScheme(), uri.getHost(), uri.getPath() + "!/", null);
-
+                LogImpl.logger.debug("Try opening the zip stream for output path :"+archiveUri);
                 try (FileSystem archiveFs = FileSystems.newFileSystem(archiveUri, Collections.singletonMap("create", "true"))) {
                     Path archiveRootPath = archiveFs.getPath("/");
                     SourceSaver saver = api.getSourceSaver(entry);

@@ -14,6 +14,7 @@ import org.jd.gui.util.decompiler.ContainerLoader;
 import org.jd.gui.util.decompiler.LineNumberStringBuilderPrinter;
 import org.jd.gui.util.exception.ExceptionUtil;
 import org.jd.gui.util.io.NewlineOutputStream;
+import org.jd.gui.util.log.ServiceLogImpl;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -69,6 +70,7 @@ public class ClassFileSourceSaverProvider extends AbstractSourceSaverProvider {
                 listener.pathSaved(path);
             }
             // Init preferences
+            ServiceLogImpl.logger.debug("Decompiling class file: " + entry.getPath());
             Map<String, String> preferences = api.getPreferences();
             boolean realignmentLineNumbers = getPreferenceValue(preferences, REALIGN_LINE_NUMBERS, true);
             boolean unicodeEscape = getPreferenceValue(preferences, ESCAPE_UNICODE_CHARACTERS, false);

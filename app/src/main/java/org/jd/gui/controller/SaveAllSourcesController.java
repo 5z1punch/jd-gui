@@ -10,6 +10,7 @@ package org.jd.gui.controller;
 import org.jd.gui.api.API;
 import org.jd.gui.api.feature.SourcesSavable;
 import org.jd.gui.util.exception.ExceptionUtil;
+import org.jd.gui.util.log.LogImpl;
 import org.jd.gui.view.SaveAllSourcesView;
 
 import javax.swing.*;
@@ -37,6 +38,8 @@ public class SaveAllSourcesController implements SourcesSavable.Controller, Sour
         this.saveAllSourcesView.show(file);
         // Execute background task
         executor.execute(() -> {
+            LogImpl.logger.debug("Enter Saving background task...");
+            LogImpl.logger.debug("Getting savable files count...");
             int fileCount = savable.getFileCount();
 
             saveAllSourcesView.updateProgressBar(0);

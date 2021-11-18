@@ -11,6 +11,7 @@ import org.jd.gui.api.API;
 import org.jd.gui.api.model.Container;
 import org.jd.gui.spi.SourceSaver;
 import org.jd.gui.util.exception.ExceptionUtil;
+import org.jd.gui.util.log.ServiceLogImpl;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class FileSourceSaverProvider extends AbstractSourceSaverProvider {
     @Override
     public void saveContent(API api, SourceSaver.Controller controller, SourceSaver.Listener listener, Path rootPath, Path path, Container.Entry entry) {
         listener.pathSaved(path);
-
+        ServiceLogImpl.logger.debug("Copy source file: " + entry.getPath());
         try (InputStream is = entry.getInputStream()) {
             Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {

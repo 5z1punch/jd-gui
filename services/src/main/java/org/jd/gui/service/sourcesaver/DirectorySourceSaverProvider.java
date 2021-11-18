@@ -11,6 +11,7 @@ import org.jd.gui.api.API;
 import org.jd.gui.api.model.Container;
 import org.jd.gui.spi.SourceSaver;
 import org.jd.gui.util.exception.ExceptionUtil;
+import org.jd.gui.util.log.ServiceLogImpl;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,8 +28,23 @@ public class DirectorySourceSaverProvider extends AbstractSourceSaverProvider {
 
     protected int getFileCount(API api, Collection<Container.Entry> entries) {
         int count = 0;
-
+        int all = entries.size();
+        ServiceLogImpl.logger.debug("There are "+all+" entries in the current working directory");
+        ServiceLogImpl.logger.debug("Start traversing the directory...");
+        // For Debug
+//        int a=0;
         for (Container.Entry e : entries) {
+            if(count%256==0){
+                ServiceLogImpl.logger.debug("["+count+"/"+all +"] DOWN");
+                ServiceLogImpl.logger.debug("Current working on "+e.getPath());
+            }
+//            if(e.getPath().equals("Interface_A8.ser")){
+//                ServiceLogImpl.logger.debug("Current working on "+e.getPath());
+//                a=1;
+//            }
+//            if(a==1){
+//                ServiceLogImpl.logger.debug("Current working on "+e.getPath());
+//            }
             SourceSaver sourceSaver = api.getSourceSaver(e);
 
             if (sourceSaver != null) {
