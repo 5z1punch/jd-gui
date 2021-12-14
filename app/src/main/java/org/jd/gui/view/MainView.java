@@ -61,6 +61,7 @@ public class MainView<T extends JComponent & UriGettable> implements UriOpenable
             ActionListener closeActionListener,
             ActionListener saveActionListener,
             ActionListener saveAllSourcesActionListener,
+            ActionListener saveMvnProjectActionListener,
             ActionListener exitActionListener,
             ActionListener copyActionListener,
             ActionListener pasteActionListener,
@@ -178,6 +179,7 @@ public class MainView<T extends JComponent & UriGettable> implements UriOpenable
             closeAction = newAction("Close", false, closeActionListener);
             Action saveAction = newAction("Save", newImageIcon("/org/jd/gui/images/save.png"), false, saveActionListener);
             Action saveAllSourcesAction = newAction("Save All Sources", newImageIcon("/org/jd/gui/images/save_all.png"), false, saveAllSourcesActionListener);
+            Action saveMvnProjectAction = newAction("Save As a MVN Project", newImageIcon("/org/jd/gui/images/save_mvn.png"), false, saveMvnProjectActionListener);
             Action exitAction = newAction("Exit", true, "Quit this program", exitActionListener);
             Action copyAction = newAction("Copy", newImageIcon("/org/jd/gui/images/copy.png"), false, copyActionListener);
             Action pasteAction = newAction("Paste Log", newImageIcon("/org/jd/gui/images/paste.png"), true, pasteActionListener);
@@ -207,6 +209,7 @@ public class MainView<T extends JComponent & UriGettable> implements UriOpenable
             menu.addSeparator();
             menu.add(saveAction).setAccelerator(KeyStroke.getKeyStroke('S', menuShortcutKeyMask));
             menu.add(saveAllSourcesAction).setAccelerator(KeyStroke.getKeyStroke('S', menuShortcutKeyMask|InputEvent.ALT_MASK));
+            menu.add(saveMvnProjectAction).setAccelerator(KeyStroke.getKeyStroke('M', menuShortcutKeyMask));
             menu.addSeparator();
             menu.add(recentFiles);
             if (!PlatformService.getInstance().isMac()) {
@@ -324,6 +327,7 @@ public class MainView<T extends JComponent & UriGettable> implements UriOpenable
                     openTypeAction.setEnabled(enabled);
                     searchAction.setEnabled(enabled);
                     saveAllSourcesAction.setEnabled((mainTabbedPanel.getTabbedPane().getSelectedComponent() instanceof SourcesSavable));
+                    saveMvnProjectAction.setEnabled((mainTabbedPanel.getTabbedPane().getSelectedComponent() instanceof SourcesSavable));
 
                     if (tabCount < lastTabCount) {
                         panelClosedCallback.run();

@@ -11,8 +11,7 @@
 - [ ] 优化 mvn 包识别和下载机制，细化小版本
 - [ ] 对不同 provider 来源的source做区分
 - [ ] 直接导出 mvn 工程，方便 idea index src
-- [ ] 对抗混淆，增加选项在导出时不省略包名
-- [ ] 对抗混淆，提示类名大小写冲突
+- [ ] 增加选项：不使用 import 
 
 ## BUG FIX
 ### save all sources 异常处理

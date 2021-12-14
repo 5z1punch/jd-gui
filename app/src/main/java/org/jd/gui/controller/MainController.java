@@ -63,6 +63,7 @@ public class MainController implements API {
     protected PreferencesController preferencesController;
     protected SearchInConstantPoolsController searchInConstantPoolsController;
     protected SaveAllSourcesController saveAllSourcesController;
+    protected SaveMvnProjectController saveMvnProjectController;
     protected SelectLocationController selectLocationController;
     protected AboutController aboutController;
     protected SourceLoaderService sourceLoaderService;
@@ -90,6 +91,7 @@ public class MainController implements API {
                 e -> onClose(),
                 e -> onSaveSource(),
                 e -> onSaveAllSources(),
+                e -> onSaveMvnProject(),
                 e -> System.exit(0),
                 e -> onCopy(),
                 e -> onPaste(),
@@ -143,6 +145,7 @@ public class MainController implements API {
                 // Background controller creation
                 JFrame mainFrame = mainView.getMainFrame();
                 saveAllSourcesController = new SaveAllSourcesController(MainController.this, mainFrame);
+                saveMvnProjectController = new SaveMvnProjectController(MainController.this, mainFrame);
                 containerChangeListeners.add(openTypeController = new OpenTypeController(MainController.this, executor, mainFrame));
                 containerChangeListeners.add(openTypeHierarchyController = new OpenTypeHierarchyController(MainController.this, executor, mainFrame));
                 goToController = new GoToController(configuration, mainFrame);
@@ -251,7 +254,7 @@ public class MainController implements API {
         }
     }
 
-    protected void onSaveAllSources() {
+    private void onSaveSourcesZip(SourcesSavable.Controller controller){
         if (! saveAllSourcesController.isActivated()) {
             JComponent currentPanel = mainView.getSelectedMainPanel();
 
@@ -280,6 +283,14 @@ public class MainController implements API {
                 }
             }
         }
+    }
+
+    protected void onSaveAllSources() {
+        this.onSaveSourcesZip(saveAllSourcesController);
+    }
+
+    protected void onSaveMvnProject() {
+        this.onSaveSourcesZip(saveMvnProjectController);
     }
 
     protected void onCopy() {

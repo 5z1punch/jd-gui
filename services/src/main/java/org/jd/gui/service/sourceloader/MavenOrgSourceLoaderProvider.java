@@ -12,6 +12,7 @@ import org.jd.gui.api.model.Container;
 import org.jd.gui.service.preferencespanel.MavenOrgSourceLoaderPreferencesProvider;
 import org.jd.gui.spi.SourceLoader;
 import org.jd.gui.util.exception.ExceptionUtil;
+import org.jd.gui.util.log.ServiceLogImpl;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -119,6 +120,7 @@ public class MavenOrgSourceLoaderProvider implements SourceLoader {
 
         if (!entry.isDirectory() && !failed.contains(entry)) {
             try {
+                ServiceLogImpl.logger.info("Checking if `"+entry.getPath()+"` can be download from mvn :");
                 // SHA-1
                 MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
                 byte[] buffer = new byte[1024 * 2];
@@ -136,7 +138,7 @@ public class MavenOrgSourceLoaderProvider implements SourceLoader {
                 }
 
                 String sha1 = sb.toString();
-
+                ServiceLogImpl.logger.info("search sha1 : "+sha1);
                 // Search artifact on maven.org
                 URL searchUrl = new URL(MAVENORG_SEARCH_URL_PREFIX + sha1 + MAVENORG_SEARCH_URL_SUFFIX);
                 boolean sourceAvailable = false;
